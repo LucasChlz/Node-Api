@@ -29,7 +29,7 @@ router.get('/:name_url', async (request, response) => {
         const singleProduct = await Product.findOne({ name_url: nameUrl });
 
         await Product.countDocuments((err, count) => {
-            if (count == 0)
+            if (count == 0 || singleProduct === null)
                 return response.status(400).send({ message: "you don't have any product registred with this name_url"});
             
             return response.send({
@@ -82,6 +82,24 @@ router.post('/create', async (request, response) => {
 
     } catch (err) {
         return response.status(400).send({ message: 'error trting create product, please fill all fields'});
+    }
+});
+
+router.delete('/delete', async (request, response) => {
+    try {            
+        const deleteProducts = await Product.deleteMany();
+
+        if (deleteProducts.n === 0) 
+            return response.status(400).send({ message: "you don't have products to deleted"});
+
+        return response.send({
+            message: 'product sucessfully deleted', 
+            info: `${deleteProducts.deletedCount} products have been deleted`
+        });
+
+    } catch (err) {
+        console.log(err);
+        return response.status(400).send({ message: "error trying delete"});
     }
 });
 
