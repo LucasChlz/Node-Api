@@ -1,0 +1,29 @@
+{
+  "name": "Node-Api",
+  "version": "1.0.0",
+  "description": "learning how to create a node api",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasChlz/Node-Api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucasChlz/Node-Api/issues"
+  },
+  "homepage": "https://github.com/LucasChlz/Node-Api#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.5"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9"
+  }
+}
