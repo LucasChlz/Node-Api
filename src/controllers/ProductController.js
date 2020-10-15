@@ -4,8 +4,21 @@ const Product = require('../models/Product');
 
 const router = express.Router();
 
-router.get('/', (request, response) => {
+router.get('/', async (request, response) => {
+    try {
+        const product = await Product.find();
 
+        await Product.countDocuments((err, count) => {
+            if (count === 0) 
+                return response.send({ message: "you don't have any product registred" });
+
+            return response.send({
+                product
+            })
+        })
+    } catch (err) {
+        return response.send({ message: 'error to trying listing products'})
+    }
 });
 
 router.post('/create', async (request, response) => {
@@ -18,11 +31,12 @@ router.post('/create', async (request, response) => {
         const product = await Product.create(request.body);
 
         return response.send({
-            product
+            product,
+            message: 'product sucessfully created'
         });
 
     } catch (err) {
-        console.log(err)
+        return response.send({ message: 'error trting create product'});
     }
 });
 
