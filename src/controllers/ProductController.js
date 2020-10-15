@@ -22,6 +22,27 @@ router.get('/', async (request, response) => {
     }
 });
 
+router.get('/:name_url', async (request, response) => {
+    const nameUrl = request.params.name_url;
+    
+    try {
+        const singleProduct = await Product.findOne({ name_url: nameUrl });
+
+        await Product.countDocuments((err, count) => {
+            if (count == 0)
+                return response.status(400).send({ message: "you don't have any product registred with this name_url"});
+            
+            return response.send({
+                message: 'Product sucessfully found',
+                singleProduct
+            });
+        });
+    } catch (err) {
+        console.log(err);
+        return response.status(400).send({ message: "error"});
+    }
+});
+
 router.post('/create', async (request, response) => {
     const { name, description, amount, name_url, createdAt } = request.body;
 
