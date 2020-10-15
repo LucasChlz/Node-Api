@@ -44,7 +44,7 @@ router.get('/:name_url', async (request, response) => {
 });
 
 router.post('/create', async (request, response) => {
-    const { name, description, amount, name_url, createdAt } = request.body;
+    const { name, description, amount, price, createdAt } = request.body;
 
     try {
 
@@ -70,6 +70,7 @@ router.post('/create', async (request, response) => {
             name,
             description,
             amount,
+            price,
             name_url: validateNameUrl(),
             createdAt
         });
@@ -80,7 +81,7 @@ router.post('/create', async (request, response) => {
         });
 
     } catch (err) {
-        return response.status(400).send({ message: 'error trting create product'});
+        return response.status(400).send({ message: 'error trting create product, please fill all fields'});
     }
 });
 
