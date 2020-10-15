@@ -13,6 +13,7 @@ router.get('/', async (request, response) => {
                 return response.send({ message: "you don't have any product registred" });
 
             return response.send({
+                message: `You have ${count} products`,
                 product
             })
         })
