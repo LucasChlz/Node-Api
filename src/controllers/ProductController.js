@@ -1,4 +1,3 @@
-const { User } = require('discord.js');
 const express = require('express');
 const Product = require('../models/Product');
 
@@ -22,15 +21,15 @@ router.get('/', async (request, response) => {
     }
 });
 
-router.get('/:name_url', async (request, response) => {
-    const nameUrl = request.params.name_url;
+router.get('/:id', async (request, response) => {
+    const _id = request.params.id;
     
     try {
-        const singleProduct = await Product.findOne({ name_url: nameUrl });
+        const singleProduct = await Product.findOne({ _id });
 
         await Product.countDocuments((err, count) => {
             if (count == 0 || singleProduct === null)
-                return response.status(400).send({ message: "you don't have any product registred with this name_url"});
+                return response.status(400).send({ message: "you don't have any product registred with this id"});
             
             return response.send({
                 message: 'Product sucessfully found',
@@ -44,26 +43,10 @@ router.get('/:name_url', async (request, response) => {
 });
 
 router.post('/create', async (request, response) => {
-    const { name, description, amount, price, createdAt } = request.body;
+    const { id, name, description, amount, price, createdAt } = request.body;
 
     try {
-
-        var newName = name;
-        const validateNameUrl = () => {
-            newName = newName.replace(/[áàãâä]/gi, 'a');
-            newName = newName.replace(/[éèêë]/gi, 'e');
-            newName = newName.replace(/[íìîï]/gi, 'i');
-            newName = newName.replace(/[óòõôö]/gi, 'o');
-            newName = newName.replace(/[úùûü]/gi, 'u');
-            newName = newName.replace(/[ç]/gi, 'c');
-            newName = newName.replace(/[^a-z0-9]/gi, '_');
-            newName = newName.replace(/_+/gi, '-');
-            newName = newName.toLowerCase();
-        
-            return newName;
-        }
-
-        if (await Product.findOne({ name_url: validateNameUrl() }))
+        if (await Product.findOne({ name }))
             return response.status(400).send({ error: 'This product already exist' });
 
         const product = await Product.create({
@@ -71,7 +54,6 @@ router.post('/create', async (request, response) => {
             description,
             amount,
             price,
-            name_url: validateNameUrl(),
             createdAt
         });
 
@@ -103,19 +85,19 @@ router.delete('/delete', async (request, response) => {
     }
 });
 
-router.delete('/delete/:name_url', async (request, response) => {
-    const nameUrl = request.params.name_url;
+router.delete('/delete/:id', async (request, response) => {
+    const _id = request.params.id;
 
     try {
-        const deleteProduct = await Product.deleteOne({ name_url: nameUrl });
+        const deleteProduct = await Product.deleteOne({ _id });
 
         if (deleteProduct.n === 0)
-            return response.status(400).send({ message: "you don't have any product with this name_url" });
+            return response.status(400).send({ message: "you don't have any product with this id" });
 
         return response.send({
             message: 'product sucessfully deleted'
         });
-        
+
     } catch (err) {
         console.log(err);
         return response.status(400).send({ message: "error trying deleted" });

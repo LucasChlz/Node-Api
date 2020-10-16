@@ -17,11 +17,6 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    name_url: {
-        type: String,
-        required: true,
-        lowercase: true,
-    },
     createdAt: {
         type: Date,
         default: Date.now
