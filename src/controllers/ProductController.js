@@ -103,4 +103,23 @@ router.delete('/delete', async (request, response) => {
     }
 });
 
+router.delete('/delete/:name_url', async (request, response) => {
+    const nameUrl = request.params.name_url;
+
+    try {
+        const deleteProduct = await Product.deleteOne({ name_url: nameUrl });
+
+        if (deleteProduct.n === 0)
+            return response.status(400).send({ message: "you don't have any product with this name_url" });
+
+        return response.send({
+            message: 'product sucessfully deleted'
+        });
+        
+    } catch (err) {
+        console.log(err);
+        return response.status(400).send({ message: "error trying deleted" });
+    }
+});
+
 module.exports = app => app.use('/', router);
