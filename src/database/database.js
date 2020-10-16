@@ -6,4 +6,6 @@ mongoose.connect('mongodb://localhost/node-api', {
     useCreateIndex: true
 })
 
+mongoose.set('useFindAndModify', false);
+
 module.exports = mongoose;

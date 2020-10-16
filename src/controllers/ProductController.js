@@ -43,7 +43,7 @@ router.get('/:id', async (request, response) => {
 });
 
 router.post('/create', async (request, response) => {
-    const { id, name, description, amount, price, createdAt } = request.body;
+    const { name, description, amount, price, createdAt } = request.body;
 
     try {
         if (await Product.findOne({ name }))
@@ -92,7 +92,7 @@ router.delete('/delete/:id', async (request, response) => {
         const deleteProduct = await Product.deleteOne({ _id });
 
         if (deleteProduct.n === 0)
-            return response.status(400).send({ message: "you don't have any product with this id" });
+            return response.status(400).send({ message: "you don't have any product with this name_url" });
 
         return response.send({
             message: 'product sucessfully deleted'
@@ -102,6 +102,16 @@ router.delete('/delete/:id', async (request, response) => {
         console.log(err);
         return response.status(400).send({ message: "error trying deleted" });
     }
+});
+
+router.patch('/edit/:id', async (request, response) => {
+    const _id = request.params.id;
+    
+    const product = await Product.findByIdAndUpdate({ _id }, request.body);
+
+    response.send({
+        message: "product sucessfully updated",
+    })
 });
 
 module.exports = app => app.use('/', router);
